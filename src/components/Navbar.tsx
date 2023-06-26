@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 import { Icons } from './Icons'
 import { buttonVariants } from './ui/Button'
+import { UserAccountNav } from './UserAccountNav'
 // import { UserAccountNav } from './UserAccountNav'
 // import SearchBar from './SearchBar'
 
@@ -22,8 +23,7 @@ const Navbar = async () => {
 
         {/* actions */}
         {session?.user ? (
-          // <UserAccountNav user={session.user} />
-          <p>Youre logged in</p>
+          <UserAccountNav user={session.user} />
         ) : (
           <Link href='/sign-in' className={buttonVariants()}>
             Sign In

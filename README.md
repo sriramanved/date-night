@@ -7,7 +7,7 @@
 - Shadcn-ui, Tailwind — built-in components and styling
 - Neon — our Serverless PostgreSQL database
 - UploadThing — image/ video server uploads
-- React query — optimized data fetching
+- React-Query — optimized data fetching
 - Fuse.js — fuzzy searching algorithm
 - Editor.js — sleek post editor
 

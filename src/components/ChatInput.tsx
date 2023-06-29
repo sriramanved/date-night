@@ -33,7 +33,7 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ messages: 'hello' }),
+        body: JSON.stringify({ messages: [_message] }),
       })
 
       return response.body
@@ -41,8 +41,8 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
     // onMutate(message) {
     //   addMessage(message)
     // },
-    // onSuccess: async (stream) => {
-    //   if (!stream) throw new Error('No stream')
+    onSuccess: async (stream) => {
+      if (!stream) throw new Error('No stream')
 
     //   // construct new message to add
     //   const id = nanoid()
@@ -57,16 +57,17 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
 
     //   setIsMessageUpdating(true)
 
-    //   const reader = stream.getReader()
-    //   const decoder = new TextDecoder()
-    //   let done = false
+      const reader = stream.getReader()
+      const decoder = new TextDecoder()
+      let done = false
 
-    //   while (!done) {
-    //     const { value, done: doneReading } = await reader.read()
-    //     done = doneReading
-    //     const chunkValue = decoder.decode(value)
+      while (!done) {
+        const { value, done: doneReading } = await reader.read()
+        done = doneReading
+        const chunkValue = decoder.decode(value)
+        console.log(chunkValue)
     //     updateMessage(id, (prev) => prev + chunkValue)
-    //   }
+      }
 
     //   // clean up
     //   setIsMessageUpdating(false)
@@ -75,7 +76,7 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
     //   setTimeout(() => {
     //     textareaRef.current?.focus()
     //   }, 10)
-    // },
+    },
     // onError: (_, message) => {
     //   toast.error('Something went wrong. Please try again.')
     //   removeMessage(message.id)

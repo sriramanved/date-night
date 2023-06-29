@@ -5,13 +5,14 @@ import Providers from '@/components/Providers'
 import { Toaster } from '@/components/ui/Toaster'
 
 import '@/styles/globals.css'
+import { Metadata } from 'next'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata = {
-  title: 'Breadit',
-  description: 'A Reddit clone built with Next.js and TypeScript.',
-}
+export const metadata: Metadata = {
+  title: "Date night",
+  description: "A website to find cool date ideas and hot new events.",
+};
 
 export default function RootLayout({
   children,

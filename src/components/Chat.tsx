@@ -1,8 +1,8 @@
 'use client'
 
 import { FC } from 'react'
-// import ChatInput from './ChatInput'
-// import ChatMessages from './ChatMessages'
+import ChatInput from './ChatInput'
+import ChatMessages from './ChatMessages'
 import ChatHeader from './ChatHeader'
 import {
   Accordion,
@@ -10,7 +10,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from './ui/Accordion';
-import ChatInput from './ChatInput';
 
 const Chat: FC = () => {
   return (
@@ -26,7 +25,7 @@ const Chat: FC = () => {
             </AccordionTrigger>
             <AccordionContent>
               <div className='flex flex-col h-80'>
-                {/* <ChatMessages className='px-2 py-3 flex-1' /> */}
+                <ChatMessages className='px-2 py-3 flex-1' />
                 <ChatInput className='px-4' />
               </div>
             </AccordionContent>

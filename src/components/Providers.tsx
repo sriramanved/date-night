@@ -2,6 +2,7 @@
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
+import { MessagesProvider } from "@/context/messages";
 import { FC, ReactNode } from "react";
 
 interface LayoutProps {
@@ -13,7 +14,9 @@ const Providers: FC<LayoutProps> = ({ children }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SessionProvider>{children}</SessionProvider>
+      <SessionProvider>
+        <MessagesProvider>{children}</MessagesProvider>
+      </SessionProvider>
     </QueryClientProvider>
   );
 };

@@ -1,3 +1,4 @@
+import Chat from '@/components/Chat'
 import CustomFeed from '@/components/homepage/CustomFeed'
 import GeneralFeed from '@/components/homepage/GeneralFeed'
 import { buttonVariants } from '@/components/ui/Button'
@@ -44,6 +45,7 @@ export default async function Home() {
           </dl>
         </div>
       </div>
+      <Chat />
     </>
   )
 }

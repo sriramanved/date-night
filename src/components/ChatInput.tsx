@@ -7,7 +7,6 @@ import { useMutation } from '@tanstack/react-query'
 import { CornerDownLeft, Loader2 } from 'lucide-react'
 import { nanoid } from 'nanoid'
 import { FC, HTMLAttributes, useContext, useRef, useState } from 'react'
-// import { toast } from 'react-hot-toast'
 import { toast } from '@/hooks/use-toast'
 import TextareaAutosize from 'react-textarea-autosize'
 

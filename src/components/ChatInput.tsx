@@ -64,7 +64,6 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
         const { value, done: doneReading } = await reader.read()
         done = doneReading
         const chunkValue = decoder.decode(value)
-        console.log(chunkValue)
         updateMessage(id, (prev) => prev + chunkValue)
       }
 

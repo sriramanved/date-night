@@ -1,4 +1,4 @@
-import { NextFetchEvent, NextMiddleware, NextRequest, NextResponse } from "next/server";
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { rateLimiter } from '@/lib/rate-limiter';
 import { MiddlewareFactory } from "./types";
 

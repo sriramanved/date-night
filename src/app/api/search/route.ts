@@ -6,7 +6,7 @@ export async function GET(req: Request) {
 
   if (!q) return new Response('Invalid query', { status: 400 })
 
-  const results = await db.subreddit.findMany({
+  const communities = await db.subreddit.findMany({
     where: {
       name: {
         startsWith: q,
@@ -15,8 +15,17 @@ export async function GET(req: Request) {
     include: {
       _count: true,
     },
-    take: 5,
+    take: 3,
   })
 
-  return new Response(JSON.stringify(results))
+  const posts = await db.post.findMany({
+    where: {
+      title: {
+        startsWith: q,
+      },
+    },
+    take: 3,
+  })
+
+  return new Response(JSON.stringify({ communities, posts }))
 }

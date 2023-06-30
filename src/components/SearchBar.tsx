@@ -71,7 +71,7 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
           debounceRequest()
         }}
         value={input}
-        className='outline-none border-none focus:border-none focus:outline-none ring-0'
+        className='custom-input outline-none border-none focus:border-none focus:outline-none ring-0'
         placeholder='Search communities...'
       />
 

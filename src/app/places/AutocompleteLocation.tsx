@@ -50,7 +50,7 @@ const AutocompleteLocation = () => {
     isFetched,
   } = useQuery({
     queryFn: async () => {
-      if (!input) return {};
+      if (!input) return [];
       const options = {
         method: "GET",
         url: "https://spott.p.rapidapi.com/places/autocomplete",
@@ -58,7 +58,9 @@ const AutocompleteLocation = () => {
           skip: "0",
           country: "US",
           q: input,
+          language: ' en',
           type: "CITY",
+          limit: "80",
         },
         headers: {
           "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
@@ -90,7 +92,7 @@ const AutocompleteLocation = () => {
       />
 
       {input.length > 0 && (
-        <CommandList className="absolute bg-white top-full inset-x-0 shadow rounded-b-md">
+        <CommandList className="bg-white shadow rounded-b-md">
           {isFetched && locations?.length === 0 && (
             <CommandEmpty>No results found.</CommandEmpty>
           )}

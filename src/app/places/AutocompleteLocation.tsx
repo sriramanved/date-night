@@ -61,8 +61,7 @@ const AutocompleteLocation = () => {
           type: "CITY",
         },
         headers: {
-          "X-RapidAPI-Key":
-          process.env.NEXT_PUBLIC_RAPID_API_KEY,
+          "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
           "X-RapidAPI-Host": "spott.p.rapidapi.com",
         },
       };
@@ -92,7 +91,7 @@ const AutocompleteLocation = () => {
 
       {input.length > 0 && (
         <CommandList className="absolute bg-white top-full inset-x-0 shadow rounded-b-md">
-          {isFetched && locations.length === 0 && (
+          {isFetched && locations?.length === 0 && (
             <CommandEmpty>No results found.</CommandEmpty>
           )}
 

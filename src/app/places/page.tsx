@@ -1,7 +1,8 @@
-import { DatePickerWithRange } from "@/components/ui/DateRangePicker";
+import AutocompleteLocation from "./AutocompleteLocation"
 
-const Page = () => {
-  return <div>page</div>;
-};
+const Page = ({}) => {
+  console.log(process.env.RAPID_API_KEY);
+  return <AutocompleteLocation />
+}
 
 export default Page;

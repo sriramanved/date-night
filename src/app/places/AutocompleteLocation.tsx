@@ -58,7 +58,7 @@ const AutocompleteLocation = () => {
           skip: "0",
           country: "US",
           q: input,
-          language: ' en',
+          language: " en",
           type: "CITY",
           limit: "80",
         },
@@ -100,7 +100,10 @@ const AutocompleteLocation = () => {
           {locations && locations.length > 0 && (
             <CommandGroup heading="Locations">
               {locations.map((location: Location) => (
-                <CommandItem key={location.id} value={location.name}>
+                <CommandItem
+                  key={location.id}
+                  value={`${location.name}-${location.adminDivision1.name}`}
+                >
                   <div>
                     <span>
                       {location.name}, {location.adminDivision1.name}, USA

@@ -115,6 +115,7 @@ const AutocompleteLocation = ({ onLocationSelect }: AutocompleteLocationProps) =
                   value={`${location.name}-${location.adminDivision1.name}`}
                   onSelect={() => {
                     onLocationSelect(location);
+                    setInput(`${location.name}, ${location.adminDivision1.name}, USA`);
                   }}
                 >
                   <div>

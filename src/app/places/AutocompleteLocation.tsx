@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
+import { useOnClickOutside } from "@/hooks/use-on-click-outside";
 import { usePathname } from "next/navigation";
 import {
   Command,
@@ -29,9 +30,18 @@ interface Location {
   };
 }
 
-const AutocompleteLocation = () => {
+type AutocompleteLocationProps = {
+  onLocationSelect: (location: Location) => void;
+};
+
+const AutocompleteLocation = ({ onLocationSelect }: AutocompleteLocationProps) => {
   const [input, setInput] = useState("");
+  const commandRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+
+  useOnClickOutside(commandRef, () => {
+    setInput("");
+  });
 
   const request = debounce(async () => {
     refetch();
@@ -80,7 +90,7 @@ const AutocompleteLocation = () => {
   }, [pathname]);
 
   return (
-    <Command className="relative rounded-lg border max-w-lg overflow-visible">
+    <Command ref={commandRef} className="relative rounded-lg border max-w-lg overflow-visible">
       <CommandInput
         onValueChange={(text) => {
           setInput(text);
@@ -103,6 +113,9 @@ const AutocompleteLocation = () => {
                 <CommandItem
                   key={location.id}
                   value={`${location.name}-${location.adminDivision1.name}`}
+                  onSelect={() => {
+                    onLocationSelect(location);
+                  }}
                 >
                   <div>
                     <span>

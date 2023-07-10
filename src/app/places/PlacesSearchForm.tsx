@@ -1,12 +1,8 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from 'next/navigation'
-import * as React from 'react'
-import * as z from "zod"
-
-import { Button } from "@/components/ui/Button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -15,47 +11,52 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/Form"
-import { Input } from "@/components/ui/Input"
-import { useForm } from 'react-hook-form'
+} from "@/components/ui/Form";
+import AutocompleteLocation from "./AutocompleteLocation";
+import { toast } from '@/hooks/use-toast'
+import { Button } from "@/components/ui/Button";
 
-// import the schema and the resolver from a validation file in 'lib/validators'
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-})
+// We could assume that each location has an unique id
+const FormSchema = z.object({
+    locationName: z.string({
+      required_error: "Please select a location.",
+    }),
+  });
 
-export default function ProfileForm() {
-    // 1. Define your form.
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-          username: "",
-        },
-      })
-     
-      // 2. Define a submit handler.
-      function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values. For example, make an API call to a server via the Yelp API.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
-      }
+export function LocationForm() {
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+  });
+
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    toast({
+      title: "You submitted the following values:",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      ),
+    });
+  }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="username"
+          name="locationName"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
+            <FormItem className="flex flex-col">
+              <FormLabel>Location</FormLabel>
               <FormControl>
-                <Input placeholder="your username" {...field} />
+                <AutocompleteLocation
+                  onLocationSelect={(location) => {
+                    form.setValue("locationName", `${location.name}, ${location.adminDivision1.name}, USA`);
+                  }}
+                />
               </FormControl>
               <FormDescription>
-                This is your public display name.
+                This is the location that will be used for the center of your search.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -64,5 +65,7 @@ export default function ProfileForm() {
         <Button type="submit">Submit</Button>
       </form>
     </Form>
-  )
+  );
 }
+
+export default LocationForm;

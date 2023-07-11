@@ -16,8 +16,8 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import AutocompleteLocation from "./AutocompleteLocation";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
-// We could assume that each location has an unique id
 const FormSchema = z.object({
   locationName: z.string({
     required_error: "Please select a location.",
@@ -25,6 +25,7 @@ const FormSchema = z.object({
   pricing: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: "You have to select at least one pricing option.",
   }),
+  keywords: z.string(),
 });
 
 const pricingOptions = [
@@ -47,14 +48,14 @@ const pricingOptions = [
 ] as const;
 
 export function LocationForm() {
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
-        defaultValues: {
-            locationName: '',
-            pricing: [],
-        },
-    });
-    
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      locationName: "",
+      pricing: [],
+      keywords: "",
+    },
+  });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     form.reset();
@@ -133,6 +134,22 @@ export function LocationForm() {
                 </FormControl>
                 <FormDescription>
                   Select the pricing options you are interested in.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="keywords"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Keywords</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter keywords..." {...field} />
+                </FormControl>
+                <FormDescription>
+                  Include any terms to aid in your search.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

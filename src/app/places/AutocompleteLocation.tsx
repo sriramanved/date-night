@@ -17,10 +17,7 @@ import {
 
 interface Location {
   id: string;
-  geonameId: number;
-  type: string;
   name: string;
-  population: number;
   coordinates: {
     latitude: number;
     longitude: number;

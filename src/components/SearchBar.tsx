@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/Command";
 import { useOnClickOutside } from "@/hooks/use-on-click-outside";
 import { BookCopyIcon, Users } from "lucide-react";
+import { ExtendedPost } from "@/types/db";
 
 interface SearchBarProps {}
 
@@ -53,7 +54,7 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
         communities: (Subreddit & {
           _count: Prisma.SubredditCountOutputType;
         })[];
-        posts: Post[];
+        posts: ExtendedPost[];
       };
     },
     queryKey: ["search-query"],
@@ -108,14 +109,16 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
               {posts.map((post) => (
                 <CommandItem
                   onSelect={(e) => {
-                    router.push(`/posts/${e}`);
+                    router.push(`/r/${post.subreddit.name}/post/${e}`);
                     router.refresh();
                   }}
                   key={post.id}
                   value={post.title}
                 >
                   <BookCopyIcon className="mr-2 h-4 w-4" />
-                  <a href={`/posts/${post.id}`}>{post.title}</a>
+                  <a href={`/r/${post.subreddit.name}/post/${post.id}`}>
+                    {post.title}
+                  </a>
                 </CommandItem>
               ))}
             </CommandGroup>

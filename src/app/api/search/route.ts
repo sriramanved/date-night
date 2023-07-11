@@ -15,6 +15,7 @@ export async function GET(req: Request) {
     include: {
       _count: true,
     },
+    take: 10,
   })
 
   const posts = await db.post.findMany({
@@ -22,6 +23,9 @@ export async function GET(req: Request) {
       title: {
         contains: q,
       },
+    },
+    include: {
+      subreddit: true,
     },
     take: 10,
   })

@@ -17,6 +17,9 @@ import AutocompleteLocation from "./AutocompleteLocation";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { usePlacesContext } from "@/(contexts)/places";
+import { pricingOptions } from "@/lib/helpers/constants/pricingOptions";
+import { useState } from "react";
 
 const FormSchema = z.object({
   locationName: z.string({
@@ -28,26 +31,12 @@ const FormSchema = z.object({
   keywords: z.string(),
 });
 
-const pricingOptions = [
-  {
-    id: "$",
-    label: "$",
-  },
-  {
-    id: "$$",
-    label: "$$",
-  },
-  {
-    id: "$$$",
-    label: "$$$",
-  },
-  {
-    id: "$$$$",
-    label: "$$$$",
-  },
-] as const;
+
 
 export function LocationForm() {
+  const { setSearchParameters } = usePlacesContext();
+  const [clearInput, setClearInput] = useState(false);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -59,6 +48,7 @@ export function LocationForm() {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     form.reset();
+    setClearInput(!clearInput);
     toast({
       title: "You submitted the following values:",
       description: (
@@ -67,6 +57,7 @@ export function LocationForm() {
         </pre>
       ),
     });
+    setSearchParameters(data);
   }
 
   return (
@@ -87,6 +78,7 @@ export function LocationForm() {
                         `${location.name}, ${location.adminDivision1.name}, USA`
                       );
                     }}
+                    onClear={clearInput}
                   />
                 </FormControl>
                 <FormDescription>
@@ -149,7 +141,7 @@ export function LocationForm() {
                   <Input placeholder="Enter keywords..." {...field} />
                 </FormControl>
                 <FormDescription>
-                  Include any terms to aid in your search.
+                  Include any optional terms to aid in your search.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

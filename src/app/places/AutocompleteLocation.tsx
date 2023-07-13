@@ -29,15 +29,28 @@ interface Location {
 
 type AutocompleteLocationProps = {
   onLocationSelect: (location: Location) => void;
+  onClear: boolean;
 };
 
-const AutocompleteLocation = ({ onLocationSelect }: AutocompleteLocationProps) => {
+const AutocompleteLocation = ({
+  onLocationSelect,
+  onClear,
+}: AutocompleteLocationProps) => {
   const [input, setInput] = useState("");
+  const [hasSelectedLocation, setHasSelectedLocation] = useState(false);
   const commandRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
+  useEffect(() => {
+    if (onClear) {
+      setInput("");
+    }
+  }, [onClear]);
+
   useOnClickOutside(commandRef, () => {
-    setInput("");
+    if (!hasSelectedLocation) {
+      setInput("");
+    }
   });
 
   const request = debounce(async () => {
@@ -75,7 +88,6 @@ const AutocompleteLocation = ({ onLocationSelect }: AutocompleteLocationProps) =
         },
       };
       const { data } = await axios.request(options);
-      console.log(data);
       return data;
     },
     queryKey: ["location-query"],
@@ -87,11 +99,17 @@ const AutocompleteLocation = ({ onLocationSelect }: AutocompleteLocationProps) =
   }, [pathname]);
 
   return (
-    <Command ref={commandRef} className="relative rounded-lg border max-w-lg overflow-visible">
+    <Command
+      ref={commandRef}
+      className="relative rounded-lg border max-w-lg overflow-visible"
+    >
       <CommandInput
         onValueChange={(text) => {
           setInput(text);
           debounceRequest();
+          if (hasSelectedLocation) {
+            setHasSelectedLocation(false);
+          }
         }}
         value={input}
         className="custom-input outline-none border-none focus:border-none focus:outline-none ring-0"
@@ -112,7 +130,10 @@ const AutocompleteLocation = ({ onLocationSelect }: AutocompleteLocationProps) =
                   value={`${location.name}-${location.adminDivision1.name}`}
                   onSelect={() => {
                     onLocationSelect(location);
-                    setInput(`${location.name}, ${location.adminDivision1.name}, USA`);
+                    setInput(
+                      `${location.name}, ${location.adminDivision1.name}, USA`
+                    );
+                    setHasSelectedLocation(true); 
                   }}
                 >
                   <div>

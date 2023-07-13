@@ -2,7 +2,7 @@
 
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
-import { MessagesProvider } from "@/context/messages";
+import { MessagesProvider } from "@/(contexts)/messages";
 import { FC, ReactNode } from "react";
 
 interface LayoutProps {

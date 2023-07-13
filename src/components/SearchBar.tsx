@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import debounce from "lodash.debounce";
 import { usePathname, useRouter } from "next/navigation";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   Command,
@@ -19,9 +19,7 @@ import { useOnClickOutside } from "@/hooks/use-on-click-outside";
 import { BookCopyIcon, Users } from "lucide-react";
 import { ExtendedPost } from "@/types/db";
 
-interface SearchBarProps {}
-
-const SearchBar: FC<SearchBarProps> = ({}) => {
+const SearchBar = () => {
   const [input, setInput] = useState<string>("");
   const pathname = usePathname();
   const commandRef = useRef<HTMLDivElement>(null);

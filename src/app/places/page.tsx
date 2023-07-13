@@ -1,15 +1,15 @@
-'use client'
+import PlacesSearchForm from "./PlacesSearchForm";
+import PlacesSearchResults from "./PlacesSearchResults";
+import { PlacesProvider } from "@/(contexts)/places";
 
-// ON THIS PAGE, we should render that client side form. We should also render the results of the search query.
-import PlacesSearchForm from "./PlacesSearchForm"
-
-const Page = ({}) => {
+const Page = () => {
+  // render meta tags about the page
   return (
-    <>
+    <PlacesProvider>
       <PlacesSearchForm />
-    </>
-  )
-
-}
+      <PlacesSearchResults />
+    </PlacesProvider>
+  );
+};
 
 export default Page;

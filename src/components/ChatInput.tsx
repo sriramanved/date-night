@@ -1,6 +1,6 @@
 'use client'
 
-import { MessagesContext } from '@/context/messages'
+import { MessagesContext } from '@/(contexts)/messages'
 import { cn } from '@/lib/utils'
 import { Message } from '@/lib/validators/message'
 import { useMutation } from '@tanstack/react-query'

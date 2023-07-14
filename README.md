@@ -2,7 +2,7 @@
 
 ## Built with the Next.js App Router, TypeScript & Prisma
 
-- Vercel's AI SDK — real-time streaming responses from GPT-3.5
+- OpenAI's API — real-time streaming responses from GPT-3.5
 - Zod — schema validation
 - Shadcn-ui, Tailwind — built-in components and styling
 - Neon — our Serverless PostgreSQL database

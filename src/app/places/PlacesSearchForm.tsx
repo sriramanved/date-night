@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/Input";
 import { usePlacesContext } from "@/(contexts)/places";
 import { pricingOptions } from "@/lib/helpers/constants/pricingOptions";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const FormSchema = z.object({
   locationName: z.string({
@@ -31,11 +32,9 @@ const FormSchema = z.object({
   keywords: z.string(),
 });
 
-
-
 export function LocationForm() {
-  const { setSearchParameters } = usePlacesContext();
-  const [clearInput, setClearInput] = useState(false);
+  const { setSearchParameters, isFetching } = usePlacesContext();
+  const [clearInput, setClearInput] = useState(0);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -48,7 +47,7 @@ export function LocationForm() {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     form.reset();
-    setClearInput(!clearInput);
+    setClearInput(Date.now());
     toast({
       title: "You submitted the following values:",
       description: (
@@ -72,6 +71,7 @@ export function LocationForm() {
                 <FormLabel>Location</FormLabel>
                 <FormControl>
                   <AutocompleteLocation
+                    key={clearInput}
                     onLocationSelect={(location) => {
                       form.setValue(
                         "locationName",
@@ -138,7 +138,11 @@ export function LocationForm() {
               <FormItem className="flex flex-col">
                 <FormLabel>Keywords</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter keywords..." {...field} />
+                  <Input
+                    className="w-full md:w-1/2"
+                    placeholder="Enter keywords..."
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
                   Include any optional terms to aid in your search.
@@ -149,7 +153,15 @@ export function LocationForm() {
           />
         </>
 
-        <Button type="submit">Search for date ideas!</Button>
+        <Button type="submit" disabled={isFetching}>
+          {isFetching ? (
+            <>
+              Searching... <Loader2 className="mx-2 h-4 w-4 animate-spin"/>
+            </> 
+          ) : (
+            "Search for date ideas!"
+          )}
+        </Button>
       </form>
     </Form>
   );

@@ -5,7 +5,6 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import { useOnClickOutside } from "@/hooks/use-on-click-outside";
-import { usePathname } from "next/navigation";
 import {
   Command,
   CommandInput,
@@ -29,7 +28,7 @@ interface Location {
 
 type AutocompleteLocationProps = {
   onLocationSelect: (location: Location) => void;
-  onClear: boolean;
+  onClear: number;
 };
 
 const AutocompleteLocation = ({
@@ -39,11 +38,11 @@ const AutocompleteLocation = ({
   const [input, setInput] = useState("");
   const [hasSelectedLocation, setHasSelectedLocation] = useState(false);
   const commandRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
 
   useEffect(() => {
     if (onClear) {
       setInput("");
+      setHasSelectedLocation(false);
     }
   }, [onClear]);
 
@@ -93,10 +92,6 @@ const AutocompleteLocation = ({
     queryKey: ["location-query"],
     enabled: false,
   });
-
-  useEffect(() => {
-    setInput("");
-  }, [pathname]);
 
   return (
     <Command

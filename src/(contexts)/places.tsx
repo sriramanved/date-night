@@ -11,20 +11,25 @@ interface SearchParameters {
 interface PlacesContextType {
   searchParameters: SearchParameters | null;
   setSearchParameters: (value: SearchParameters) => void;
+  isFetching: boolean;
+  setIsFetching: (value: boolean) => void;
 }
 
 const defaultValue: PlacesContextType = {
   searchParameters: null,
   setSearchParameters: () => {},
+  isFetching: false,
+  setIsFetching: () => {},
 };
 
 export const PlacesContext = createContext<PlacesContextType>(defaultValue);
 
 export function PlacesProvider({ children }: { children: React.ReactNode }) {
   const [searchParameters, setSearchParameters] = useState<SearchParameters | null>(null);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   return (
-    <PlacesContext.Provider value={{ searchParameters, setSearchParameters }}>
+    <PlacesContext.Provider value={{ searchParameters, setSearchParameters, isFetching, setIsFetching }}>
       {children}
     </PlacesContext.Provider>
   );

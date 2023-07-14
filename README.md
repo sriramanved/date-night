@@ -8,7 +8,6 @@
 - Neon — our Serverless PostgreSQL database
 - UploadThing — image/ video server uploads
 - React-Query — optimized data fetching
-- Fuse.js — fuzzy searching algorithm
 - Editor.js — sleek post editor
 
 ## Features

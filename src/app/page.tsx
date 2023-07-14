@@ -1,4 +1,4 @@
-import Chat from '@/components/Chat'
+import Chat from '@/components/chatbot/Chat'
 import CustomFeed from '@/components/homepage/CustomFeed'
 import GeneralFeed from '@/components/homepage/GeneralFeed'
 import { buttonVariants } from '@/components/ui/Button'

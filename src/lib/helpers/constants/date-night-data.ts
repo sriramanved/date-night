@@ -1,11 +1,17 @@
 export const datenightData = `
 <url>
-<loc>https://books.toscrape.com/</loc>
-<desc>Your book store</desc>
+<loc>http://localhost:3000</loc>
+<content>
+    <feature>
+        <name></name>
+        <desc>A button on the right of the feed to create a community.</desc>
+    </feature>
+</content>
+<desc>A place to find date night ideas. This is where you can view your personalized post feed based on the communities you are subscribed to if you are signed in, and a general post feed if you are not signed in.</desc>
 </url>
 <url>
-<loc>https://books.toscrape.com/catalogue/category/books_1/index.html</loc>
-<desc>An overview about our book collection</desc>
+<loc>http://localhost:3000/sign-in</loc>
+<desc>A sign in page</desc>
 </url>
 <url>
 <loc>https://books.toscrape.com/catalogue/category/books/travel_2/index.html</loc>
@@ -41,4 +47,4 @@ export const datenightData = `
     </book>
 </content>
 </url>
-`
+`;

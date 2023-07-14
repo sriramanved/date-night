@@ -1,9 +1,15 @@
-import PlacesSearchForm from "./PlacesSearchForm";
-import PlacesSearchResults from "./PlacesSearchResults";
+import PlacesSearchForm from "../../components/places/PlacesSearchForm";
+import PlacesSearchResults from "../../components/places/PlacesSearchResults";
 import { PlacesProvider } from "@/(contexts)/places";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Places',
+  description: 'Search for places to go on a date.',
+}
 
 const Page = () => {
-  // render meta tags about the page
+
   return (
     <PlacesProvider>
       <PlacesSearchForm />

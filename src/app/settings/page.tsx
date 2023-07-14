@@ -2,8 +2,10 @@ import { redirect } from 'next/navigation'
 
 import { UserNameForm } from '@/components/UserNameForm'
 import { authOptions, getAuthSession } from '@/lib/auth'
+import { Metadata } from 'next'
 
-export const metadata = {
+
+export const metadata: Metadata = {
   title: 'Settings',
   description: 'Manage account and website settings.',
 }

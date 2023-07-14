@@ -15,16 +15,19 @@ export async function GET(req: Request) {
     include: {
       _count: true,
     },
-    take: 3,
+    take: 10,
   })
 
   const posts = await db.post.findMany({
     where: {
       title: {
-        startsWith: q,
+        contains: q,
       },
     },
-    take: 3,
+    include: {
+      subreddit: true,
+    },
+    take: 10,
   })
 
   return new Response(JSON.stringify({ communities, posts }))

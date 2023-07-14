@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { Prisma, Subreddit, Post } from '@prisma/client'
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-import debounce from 'lodash.debounce'
-import { usePathname, useRouter } from 'next/navigation'
-import { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { Prisma, Subreddit, Post } from "@prisma/client";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import debounce from "lodash.debounce";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   Command,
@@ -14,31 +14,30 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/Command'
-import { useOnClickOutside } from '@/hooks/use-on-click-outside'
-import { BookCopyIcon, Users } from 'lucide-react'
+} from "@/components/ui/Command";
+import { useOnClickOutside } from "@/hooks/use-on-click-outside";
+import { BookCopyIcon, Users } from "lucide-react";
+import { ExtendedPost } from "@/types/db";
 
-interface SearchBarProps {}
-
-const SearchBar: FC<SearchBarProps> = ({}) => {
-  const [input, setInput] = useState<string>('')
-  const pathname = usePathname()
-  const commandRef = useRef<HTMLDivElement>(null)
-  const router = useRouter()
+const SearchBar = () => {
+  const [input, setInput] = useState<string>("");
+  const pathname = usePathname();
+  const commandRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useOnClickOutside(commandRef, () => {
-    setInput('')
-  })
+    setInput("");
+  });
 
   const request = debounce(async () => {
-    refetch()
-  }, 300)
+    refetch();
+  }, 300);
 
   const debounceRequest = useCallback(() => {
-    request()
+    request();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   const {
     isFetching,
@@ -47,19 +46,22 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
     isFetched,
   } = useQuery({
     queryFn: async () => {
-      if (!input) return { communities: [], posts: [] }
-      const { data } = await axios.get(`/api/search?q=${input}`)
-      return data as { communities: (Subreddit & {
-        _count: Prisma.SubredditCountOutputType
-      })[]; posts: Post[] }
+      if (!input) return { communities: [], posts: [] };
+      const { data } = await axios.get(`/api/search?q=${input}`);
+      return data as {
+        communities: (Subreddit & {
+          _count: Prisma.SubredditCountOutputType;
+        })[];
+        posts: ExtendedPost[];
+      };
     },
-    queryKey: ['search-query'],
+    queryKey: ["search-query"],
     enabled: false,
-  })
+  });
 
   useEffect(() => {
-    setInput('')
-  }, [pathname])
+    setInput("");
+  }, [pathname]);
 
   return (
     <Command
@@ -105,15 +107,16 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
               {posts.map((post) => (
                 <CommandItem
                   onSelect={(e) => {
-                    router.push(`/posts/${e}`);
+                    router.push(`/r/${post.subreddit.name}/post/${e}`);
                     router.refresh();
                   }}
                   key={post.id}
                   value={post.title}
                 >
-                  {/* Change the icon to something suitable for posts */}
                   <BookCopyIcon className="mr-2 h-4 w-4" />
-                  <a href={`/posts/${post.id}`}>{post.title}</a>
+                  <a href={`/r/${post.subreddit.name}/post/${post.id}`}>
+                    {post.title}
+                  </a>
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -122,7 +125,6 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
       )}
     </Command>
   );
+};
 
-}
-
-export default SearchBar
+export default SearchBar;

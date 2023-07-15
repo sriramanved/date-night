@@ -3,9 +3,13 @@
 import { createContext, useContext, useState } from 'react';
 
 interface SearchParameters {
-    locationName: String;
-    pricing: String[];
-    keywords: String;
+  locationName: string;
+  pricing: string[];
+  radius: number;
+  sort_by: string;
+  keywords: string;
+  open_now?: boolean;
+  attributes?: string[];
   }  
 
 interface PlacesContextType {

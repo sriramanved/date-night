@@ -28,18 +28,28 @@ export default function PlacesSearchResults() {
     queryFn: async () => {
       if (!searchParameters) return [];
 
-      const prices = searchParameters!.pricing
+      const prices = searchParameters.pricing
         .map((price) => price.length)
         .join();
 
+      const attributes = searchParameters.attributes?.join();
+
+      const params: Record<string, unknown> = {
+        term: searchParameters.keywords,
+        location: searchParameters.locationName,
+        price: prices,
+        radius: searchParameters.radius,
+        sort_by: searchParameters.sort_by,
+        limit: 20,
+        attributes: attributes,
+      };
+
+      if (searchParameters.open_now) {
+        params.open_now = searchParameters.open_now;
+      }
+
       const { data } = await axios.get("/api/yelp", {
-        params: {
-          term: searchParameters!.keywords,
-          location: searchParameters!.locationName,
-          price: prices,
-          sort_by: "best_match",
-          limit: 20,
-        },
+        params: params, // use the new parameters object
       });
 
       console.log(data);

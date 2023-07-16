@@ -28,6 +28,8 @@ export async function GET(req: Request) {
       attributes,
     });
 
+    console.log(response.jsonBody);
+
     return new Response(JSON.stringify(response.jsonBody));
   } catch (error: any) {
     // Check if error is an AREA_TOO_LARGE error

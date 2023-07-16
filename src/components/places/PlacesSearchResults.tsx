@@ -81,9 +81,12 @@ export default function PlacesSearchResults() {
           in {searchParameters.locationName}
         </p>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {places?.businesses.map((business: Business) => (
-          <Card key={business.id} className="w-full max-w-sm">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {places?.businesses?.map((business: Business) => (
+          <Card
+            key={business.id}
+            className="flex flex-col justify-between w-full max-w-sm shadow-lg p-4 transform transition-transform duration-500 hover:scale-105"
+          >
             <CardHeader>
               <CardTitle className="text-sm">{business.name}</CardTitle>
               <div className="flex items-center space-x-2">
@@ -91,12 +94,15 @@ export default function PlacesSearchResults() {
                 {business.price && <Badge>{business.price}</Badge>}
               </div>
             </CardHeader>
-            <CardContent>
-              <img
-                src={business.image_url}
-                alt={business.name}
-                className="w-full max-h-48 object-cover mb-2"
-              />
+            <CardContent className="flex flex-col">
+              <div className="w-full h-48 flex justify-center items-center mb-2">
+                <img
+                  src={business.image_url}
+                  alt={business.name}
+                  className="object-cover rounded-lg max-h-full"
+                />
+              </div>
+
               <CardDescription className="text-sm">
                 {business.categories
                   .map((category: Category) => category.title)

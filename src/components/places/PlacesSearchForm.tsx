@@ -37,11 +37,43 @@ const validSortOptions = new Set([
   "distance",
 ]);
 
-// Array of attributes
 const filterAttributes = [
   { id: "hot_and_new", label: "Hot and New" },
-  { id: "reservation", label: "Reservation" },
-  //...add all the attributes here
+  {
+    id: "reservation",
+    label: "Takes reservations",
+  },
+  {
+    id: "gender_neutral_restrooms",
+    label: "Gender Neutral restrooms",
+  },
+  { id: "open_to_all", label: "Open To All" },
+  {
+    id: "wheelchair_accessible",
+    label: "Wheelchair Accessible",
+  },
+  {
+    id: "liked_by_vegetarians",
+    label: "Vegetarian friendly",
+  },
+  { id: "outdoor_seating", label: "Outdoor seating" },
+  {
+    id: "parking_garage",
+    label: "Parking garage nearby",
+  },
+  { id: "parking_lot", label: "Businesses which have a parking lot" },
+  {
+    id: "parking_street",
+    label: "Street parking",
+  },
+  { id: "parking_valet", label: "Parking valet" },
+  { id: "parking_bike", label: "Bike parking" },
+  {
+    id: "restaurants_delivery",
+    label: "Delivery",
+  },
+  { id: "restaurants_takeout", label: "Takeout" },
+  { id: "wifi_free", label: "Free WiFi" },
 ];
 
 const FormSchema = z.object({
@@ -54,8 +86,8 @@ const FormSchema = z.object({
   keywords: z.string(),
   radius: z
     .number()
-    .min(1, "Radius must be at least 1 meter.")
-    .max(40000, "Radius must not exceed 40,000 meters."),
+    .min(1, "Radius must be at least 1 mile.")
+    .max(24.854848, "Radius must not exceed 24.854848 miles."),
   open_now: z.boolean().optional(),
   sort_by: z.string(),
   attributes: z.array(z.string()).optional(),
@@ -64,6 +96,7 @@ const FormSchema = z.object({
 export function LocationForm() {
   const { setSearchParameters, isFetching } = usePlacesContext();
   const [clearInput, setClearInput] = useState(0);
+  const [radiusValue, setRadiusValue] = useState(6.21371);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -71,12 +104,13 @@ export function LocationForm() {
       locationName: "",
       pricing: [],
       keywords: "",
-      radius: 10000,
+      radius: 6.21371,
       sort_by: "best_match",
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    data.radius = Math.round(data.radius * 1609);
     // setClearInput(Date.now());
     toast({
       title: "You submitted the following values:",
@@ -186,13 +220,19 @@ export function LocationForm() {
             name="radius"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Search Radius (in meters)</FormLabel>
+                <FormLabel>
+                  Search Radius (in miles): {radiusValue.toFixed(2)} miles
+                </FormLabel>
                 <FormControl>
                   <Slider
-                    defaultValue={[field.value]}
-                    max={40000}
-                    step={1000} // Adjust the step as per your requirement
-                    onValueChange={(values) => field.onChange(values[0])}
+                    defaultValue={[radiusValue]}
+                    max={24.854848}
+                    min={1}
+                    step={0.01}
+                    onValueChange={(values) => {
+                      field.onChange(values[0]);
+                      setRadiusValue(values[0]);
+                    }}
                   />
                 </FormControl>
                 <FormDescription>
@@ -243,7 +283,7 @@ export function LocationForm() {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="Select a sorting option" />
                     </SelectTrigger>
                   </FormControl>

@@ -15,9 +15,18 @@ import { Badge } from "@/components/ui/Badge";
 import { Separator } from "@/components/ui/Separator";
 import { Business, Category } from "@/types/places";
 import { Button } from "@/components/ui/Button";
+import { filterAttributes } from "@/lib/helpers/constants/places";
 
 export default function PlacesSearchResults() {
   const { searchParameters, setIsFetching } = usePlacesContext();
+
+  const attributeMap: { [key: string]: string } = filterAttributes.reduce(
+    (map: { [key: string]: string }, attribute) => {
+      map[attribute.id] = attribute.label;
+      return map;
+    },
+    {}
+  );
 
   const {
     data: places,
@@ -79,13 +88,21 @@ export default function PlacesSearchResults() {
             ? `"${searchParameters.keywords}"`
             : "places"}{" "}
           in {searchParameters.locationName}
+          {searchParameters.open_now && " that are open now"}
         </p>
       )}
+      <div className="mb-6">
+        {searchParameters?.attributes?.map((attributeId) => (
+          <Badge key={attributeId} className="mr-2 mb-2">
+            {attributeMap[attributeId]}
+          </Badge>
+        ))}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {places?.businesses?.map((business: Business) => (
           <Card
             key={business.id}
-            className="flex flex-col justify-between w-full max-w-sm shadow-lg p-4 transform transition-transform duration-500 hover:scale-105"
+            className="flex flex-col justify-between w-full max-w-sm shadow-lg p-2 transform transition-transform duration-500 hover:scale-105"
           >
             <CardHeader>
               <CardTitle className="text-sm">{business.name}</CardTitle>
@@ -102,7 +119,6 @@ export default function PlacesSearchResults() {
                   className="object-cover rounded-lg max-h-full"
                 />
               </div>
-
               <CardDescription className="text-sm">
                 {business.categories
                   .map((category: Category) => category.title)
@@ -125,7 +141,7 @@ export default function PlacesSearchResults() {
                   ))}
               </div>
             </CardContent>
-            <CardFooter className="p-2 text-sm pb-2">
+            <CardFooter className="p-1 text-sm pb-2">
               <Button variant="link">
                 <a
                   href={business.url}

@@ -25,56 +25,10 @@ import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { usePlacesContext } from "@/(contexts)/places";
-import { pricingOptions } from "@/lib/helpers/constants/pricingOptions";
+import { pricingOptions, validSortOptions, filterAttributes } from "@/lib/helpers/constants/places";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Slider } from "@/components/ui/Slider";
-
-const validSortOptions = new Set([
-  "best_match",
-  "rating",
-  "review_count",
-  "distance",
-]);
-
-const filterAttributes = [
-  { id: "hot_and_new", label: "Hot and New" },
-  {
-    id: "reservation",
-    label: "Takes reservations",
-  },
-  {
-    id: "gender_neutral_restrooms",
-    label: "Gender Neutral restrooms",
-  },
-  { id: "open_to_all", label: "Open To All" },
-  {
-    id: "wheelchair_accessible",
-    label: "Wheelchair Accessible",
-  },
-  {
-    id: "liked_by_vegetarians",
-    label: "Vegetarian friendly",
-  },
-  { id: "outdoor_seating", label: "Outdoor seating" },
-  {
-    id: "parking_garage",
-    label: "Parking garage nearby",
-  },
-  { id: "parking_lot", label: "Businesses which have a parking lot" },
-  {
-    id: "parking_street",
-    label: "Street parking",
-  },
-  { id: "parking_valet", label: "Parking valet" },
-  { id: "parking_bike", label: "Bike parking" },
-  {
-    id: "restaurants_delivery",
-    label: "Delivery",
-  },
-  { id: "restaurants_takeout", label: "Takeout" },
-  { id: "wifi_free", label: "Free WiFi" },
-];
 
 const FormSchema = z.object({
   locationName: z.string({
@@ -307,7 +261,7 @@ export function LocationForm() {
             name="attributes"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Attributes</FormLabel>
+                <FormLabel>Flairs</FormLabel>
                 <FormControl>
                   <div>
                     {filterAttributes.map((attribute) => (

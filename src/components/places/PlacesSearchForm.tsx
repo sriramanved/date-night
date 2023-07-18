@@ -31,9 +31,7 @@ import { Loader2 } from "lucide-react";
 import { Slider } from "@/components/ui/Slider";
 
 const FormSchema = z.object({
-  locationName: z.string({
-    required_error: "Please select a location.",
-  }),
+  locationName: z.string().nonempty("Location is required."),
   pricing: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: "You have to select at least one pricing option.",
   }),

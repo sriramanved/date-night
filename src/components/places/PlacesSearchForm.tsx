@@ -295,7 +295,7 @@ export function LocationForm() {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>
-                  Search Radius (in miles): {radiusValue.toFixed(2)} miles
+                  Search Radius: {radiusValue.toFixed(2)} miles
                 </FormLabel>
                 <FormControl>
                   <Slider

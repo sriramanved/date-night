@@ -4,6 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandItem,
+  CommandEmpty,
+  CommandGroup,
+} from "@/components/ui/Command";
+import {
   Form,
   FormControl,
   FormDescription,
@@ -19,16 +27,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/Select";
-import { Checkbox } from "@/components/ui/Checkbox";
-import AutocompleteLocation from "./AutocompleteLocation";
-import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { toast } from "@/hooks/use-toast";
 import { usePlacesContext } from "@/(contexts)/places";
-import { pricingOptions, validSortOptions, filterAttributes } from "@/lib/helpers/constants/places";
-import { useState } from "react";
+import {
+  pricingOptions,
+  validSortOptions,
+  filterAttributes,
+} from "@/lib/helpers/constants/places";
 import { Loader2 } from "lucide-react";
 import { Slider } from "@/components/ui/Slider";
+import { useState, useCallback, useEffect, useRef } from "react";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import debounce from "lodash.debounce";
+import { useOnClickOutside } from "@/hooks/use-on-click-outside";
+
+interface Location {
+  id: string;
+  name: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  adminDivision1: {
+    name: string;
+  };
+}
 
 const FormSchema = z.object({
   locationName: z.string().nonempty("Location is required."),
@@ -46,9 +73,58 @@ const FormSchema = z.object({
 });
 
 export function LocationForm() {
-  const { setSearchParameters, isFetching } = usePlacesContext();
-  const [clearInput, setClearInput] = useState(0);
+  const { setSearchParameters, isFetching: isFetchingLocation } =
+    usePlacesContext();
   const [radiusValue, setRadiusValue] = useState(6.21371);
+  const [input, setInput] = useState("");
+  const commandRef = useRef<HTMLDivElement>(null);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+
+  const request = debounce(async () => {
+    refetch();
+  }, 300);
+
+  const debounceRequest = useCallback(() => {
+    request();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useOnClickOutside(commandRef, () => {
+    form.setValue("locationName", input);
+    setShowSearchResults(false);
+  });
+
+  const {
+    isFetching,
+    data: locations,
+    refetch,
+    isFetched,
+  } = useQuery({
+    queryFn: async () => {
+      if (!input) return [];
+      const options = {
+        method: "GET",
+        url: "https://spott.p.rapidapi.com/places/autocomplete",
+        params: {
+          skip: "0",
+          country: "US",
+          q: input,
+          language: " en",
+          type: "CITY",
+          limit: "80",
+        },
+        headers: {
+          "X-RapidAPI-Key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
+          "X-RapidAPI-Host": "spott.p.rapidapi.com",
+        },
+      };
+      const { data } = await axios.request(options);
+      return data;
+    },
+    queryKey: ["location-query"],
+    enabled: false,
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -63,7 +139,6 @@ export function LocationForm() {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     data.radius = Math.round(data.radius * 1609);
-    // setClearInput(Date.now());
     toast({
       title: "You submitted the following values:",
       description: (
@@ -82,26 +157,73 @@ export function LocationForm() {
           <FormField
             control={form.control}
             name="locationName"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Location</FormLabel>
                 <FormControl>
-                  <AutocompleteLocation
-                    key={clearInput}
-                    onLocationSelect={(location) => {
-                      form.setValue(
-                        "locationName",
-                        `${location.name}, ${location.adminDivision1.name}, USA`
-                      );
-                    }}
-                    onClear={clearInput}
-                  />
+                  <Command
+                    ref={commandRef}
+                    className="relative rounded-lg border max-w-lg overflow-visible"
+                  >
+                    <CommandInput
+                      onValueChange={(text) => {
+                        setInput(text);
+                        debounceRequest();
+                        form.setValue("locationName", text);
+                        setInput(text);
+                        setShowSearchResults(true);
+                      }}
+                      value={field.value}
+                      className="custom-input outline-none border-none focus:border-none focus:outline-none ring-0"
+                      placeholder="Search locations..."
+                    />
+
+                    {field.value.length > 0 && (
+                      <CommandList className="bg-white shadow rounded-b-md">
+                        {isFetched && locations?.length === 0 && (
+                          <CommandEmpty>No results found.</CommandEmpty>
+                        )}
+
+                        {locations && locations.length > 0 && (
+                          <CommandGroup heading="Locations">
+                            {showSearchResults &&
+                              locations.map((location: Location) => (
+                                <CommandItem
+                                  key={location.id}
+                                  value={`${location.name}-${location.adminDivision1.name}`}
+                                  onSelect={() => {
+                                    const locationString = `${location.name}, ${location.adminDivision1.name}, USA`;
+                                    form.setValue(
+                                      "locationName",
+                                      locationString
+                                    );
+                                    setInput(locationString);
+                                  }}
+                                >
+                                  <div>
+                                    <span>
+                                      {location.name},{" "}
+                                      {location.adminDivision1.name}, USA
+                                    </span>
+                                    <br />
+                                    <small>
+                                      Lat: {location.coordinates.latitude}, Lng:{" "}
+                                      {location.coordinates.longitude}
+                                    </small>
+                                  </div>
+                                </CommandItem>
+                              ))}
+                          </CommandGroup>
+                        )}
+                      </CommandList>
+                    )}
+                  </Command>
                 </FormControl>
                 <FormDescription>
                   This is the location that will be used for the center of your
                   search.
                 </FormDescription>
-                <FormMessage />
+                <FormMessage>{fieldState.error?.message}</FormMessage>
               </FormItem>
             )}
           />
@@ -302,8 +424,8 @@ export function LocationForm() {
           />
         </>
 
-        <Button type="submit" disabled={isFetching}>
-          {isFetching ? (
+        <Button type="submit" disabled={isFetchingLocation}>
+          {isFetchingLocation ? (
             <>
               Searching... <Loader2 className="mx-2 h-4 w-4 animate-spin" />
             </>

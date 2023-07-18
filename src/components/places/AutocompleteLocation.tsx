@@ -28,23 +28,14 @@ interface Location {
 
 type AutocompleteLocationProps = {
   onLocationSelect: (location: Location) => void;
-  onClear: number;
 };
 
 const AutocompleteLocation = ({
   onLocationSelect,
-  onClear,
 }: AutocompleteLocationProps) => {
   const [input, setInput] = useState("");
   const [hasSelectedLocation, setHasSelectedLocation] = useState(false);
   const commandRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (onClear) {
-      setInput("");
-      setHasSelectedLocation(false);
-    }
-  }, [onClear]);
 
   useOnClickOutside(commandRef, () => {
     if (!hasSelectedLocation) {

@@ -369,7 +369,7 @@ export function LocationForm() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Suggest to Yelp's search algorithm that the results be sorted
+                  Suggest to our search algorithm that the results be sorted
                   by the selected option.
                 </FormDescription>
                 <FormMessage />

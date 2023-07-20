@@ -48,7 +48,7 @@ export const filterAttributes = [
     id: "parking_garage",
     label: "Parking garage nearby",
   },
-  { id: "parking_lot", label: "Businesses which have a parking lot" },
+  { id: "parking_lot", label: "Parking lot" },
   {
     id: "parking_street",
     label: "Street parking",

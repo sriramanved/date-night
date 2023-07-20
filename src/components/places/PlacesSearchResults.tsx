@@ -49,7 +49,7 @@ export default function PlacesSearchResults() {
         price: prices,
         radius: searchParameters.radius,
         sort_by: searchParameters.sort_by,
-        limit: 20,
+        limit: 35,
         attributes: attributes,
       };
 

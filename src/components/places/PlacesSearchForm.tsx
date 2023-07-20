@@ -299,6 +299,7 @@ export function LocationForm() {
                 </FormLabel>
                 <FormControl>
                   <Slider
+                  className="w-full md:w-1/2"
                     defaultValue={[radiusValue]}
                     max={24.854848}
                     min={1}
@@ -369,8 +370,8 @@ export function LocationForm() {
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Suggest to our search algorithm that the results be sorted
-                  by the selected option.
+                  Suggest to our search algorithm that the results be sorted by
+                  the selected option.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

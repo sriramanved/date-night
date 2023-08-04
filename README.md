@@ -1,5 +1,7 @@
 # Date Night - a place to find date ideas near you!
 
+Quick note: WIP. Haven't fully deployed the finishing touches yet. Stay tuned! :P
+
 ## Built with the Next.js App Router, TypeScript & Prisma
 
 - OpenAI's API — real-time streaming responses from GPT-3.5

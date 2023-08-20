@@ -11,6 +11,13 @@ import {
   CommandEmpty,
   CommandGroup,
 } from "@/components/ui/Command";
+import { cn } from "@/lib/utils"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/Popover"
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import {
   Form,
   FormControl,
@@ -36,6 +43,7 @@ import {
   pricingOptions,
   validSortOptions,
   filterAttributes,
+  categories,
 } from "@/lib/helpers/constants/places";
 import { Loader2 } from "lucide-react";
 import { Slider } from "@/components/ui/Slider";
@@ -62,6 +70,7 @@ const FormSchema = z.object({
   pricing: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: "You have to select at least one pricing option.",
   }),
+  category: z.string().optional(),
   keywords: z.string(),
   radius: z
     .number()
@@ -229,6 +238,70 @@ export function LocationForm() {
           />
           <FormField
             control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Category</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-[200px] justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? categories.find(
+                              (category) => category.value === field.value
+                            )?.label
+                          : "Select category"}
+                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search category..."
+                        className="custom-input outline-none border-none focus:border-none focus:outline-none h-9"
+                      />
+                      <CommandEmpty>No category found.</CommandEmpty>
+                      <CommandGroup>
+                        {categories.map((category) => (
+                          <CommandItem
+                            value={category.label}
+                            key={category.value}
+                            onSelect={() => {
+                              form.setValue("category", category.value);
+                            }}
+                          >
+                            {category.label}
+                            <CheckIcon
+                              className={cn(
+                                "ml-auto h-4 w-4",
+                                category.value === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormDescription>
+                  Select the category for the search.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="pricing"
             render={({ field }) => (
               <FormItem className="flex flex-col">
@@ -299,7 +372,7 @@ export function LocationForm() {
                 </FormLabel>
                 <FormControl>
                   <Slider
-                  className="w-full md:w-1/2"
+                    className="w-full md:w-1/2"
                     defaultValue={[radiusValue]}
                     max={24.854848}
                     min={1}

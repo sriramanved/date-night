@@ -1,7 +1,9 @@
 "use strict";
 
-const yelp = require("yelp-fusion");
+import { categoryMapping } from "@/lib/helpers/constants/places";
+import { CategoryKey } from "@/types/places";
 
+const yelp = require("yelp-fusion");
 const client = yelp.client(process.env.NEXT_PUBLIC_YELP_API_KEY);
 
 export async function GET(req: Request) {
@@ -13,7 +15,13 @@ export async function GET(req: Request) {
     const radius = await url.searchParams.get('radius');
     const price = await url.searchParams.get('price');
     const open_now = await url.searchParams.get('open_now'); 
-    const attributes = await url.searchParams.get('attributes'); 
+    const attributes = await url.searchParams.get('attributes');
+    
+    // get the list of categories from the broad category
+    const category: CategoryKey | null = url.searchParams.get('category') as CategoryKey | null;
+
+    // get the list of categories from the broad category
+    const categories = category ? categoryMapping[category] : [];
 
   try {
     // Make a request to the Yelp API using the yelp-fusion sdk.
@@ -24,6 +32,7 @@ export async function GET(req: Request) {
       radius,
       sort_by,
       limit,
+      categories,
       open_now,
       attributes,
     });

@@ -49,6 +49,7 @@ export default function PlacesSearchResults() {
         location: searchParameters.locationName,
         price: prices,
         radius: searchParameters.radius,
+        category: searchParameters.category,
         sort_by: searchParameters.sort_by,
         limit: 35,
         attributes: attributes,

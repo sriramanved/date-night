@@ -10,6 +10,7 @@ interface SearchParameters {
   keywords: string;
   open_now?: boolean;
   attributes?: string[];
+  category?: string;
   }  
 
 interface PlacesContextType {

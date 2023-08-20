@@ -35,3 +35,19 @@ export type Business = {
   display_phone: string;
   distance: number;
 };
+
+export type CategoryKey =
+  | "food_and_drink"
+  | "snacks"
+  | "activities"
+  | "entertainment"
+  | "art_and_education"
+  | "sports"
+  | "adventure_and_nature"
+  | "nightlife"
+  | "shops_and_markets"
+  | "health_and_wellness"
+  | "accommodations_and_travel"
+  | "events_and_venues"
+  | "pets_and_animals"
+  | "transportation";

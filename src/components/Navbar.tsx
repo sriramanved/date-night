@@ -24,14 +24,28 @@ const Navbar = async () => {
         {/* search bar */}
         <SearchBar />
 
-        {/* actions */}
-        {session?.user ? (
-          <UserAccountNav user={session.user} />
-        ) : (
-          <Link href="/sign-in" className={buttonVariants()}>
-            Sign In
-          </Link>
-        )}
+        {/* actions and new navigation links */}
+        <div className="flex items-center gap-4">
+          <div className="flex gap-4 mr-4"> {/* Added margin here */}
+            <Link href="/places">
+              <p className="text-zinc-700 text-sm font-medium hover:underline cursor-pointer">
+                Places
+              </p>
+            </Link>
+            <Link href="/events">
+              <p className="text-zinc-700 text-sm font-medium hover:underline cursor-pointer">
+                Events
+              </p>
+            </Link>
+          </div>
+          {session?.user ? (
+            <UserAccountNav user={session.user} />
+          ) : (
+            <Link href="/sign-in" className={buttonVariants()}>
+              Sign In
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );

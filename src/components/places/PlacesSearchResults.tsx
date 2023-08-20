@@ -2,6 +2,7 @@
 
 import { usePlacesContext } from "@/(contexts)/places";
 import { useQuery } from "@tanstack/react-query";
+import { ExternalLink } from "lucide-react";
 import axios from "axios";
 import {
   Card,
@@ -150,6 +151,7 @@ export default function PlacesSearchResults() {
                 >
                   View on Yelp
                 </a>
+                <ExternalLink className="inline-block ml-1" size={16} />
               </Button>
             </CardFooter>
           </Card>

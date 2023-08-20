@@ -167,63 +167,74 @@ export function EventsSearchForm() {
         <>
           <FormField
             control={form.control}
-            name="radius"
-            render={({ field }) => (
+            name="locationName"
+            render={({ field, fieldState }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>
-                  Search Radius: {radiusValue.toFixed(2)} miles
-                </FormLabel>
+                <FormLabel>Location</FormLabel>
                 <FormControl>
-                  <Slider
-                    className="w-full md:w-1/2"
-                    defaultValue={[radiusValue]}
-                    max={24.854848}
-                    min={1}
-                    step={0.01}
-                    onValueChange={(values) => {
-                      field.onChange(values[0]);
-                      setRadiusValue(values[0]);
-                    }}
-                  />
+                  <Command
+                    ref={commandRef}
+                    className="relative rounded-lg border max-w-lg overflow-visible"
+                  >
+                    <CommandInput
+                      onValueChange={(text) => {
+                        setInput(text);
+                        debounceRequest();
+                        form.setValue("locationName", text);
+                        setInput(text);
+                        setShowSearchResults(true);
+                      }}
+                      value={field.value}
+                      className="custom-input outline-none border-none focus:border-none focus:outline-none ring-0"
+                      placeholder="Search locations..."
+                    />
+
+                    {field.value.length > 0 && (
+                      <CommandList className="bg-white shadow rounded-b-md">
+                        {isFetched && locations?.length === 0 && (
+                          <CommandEmpty>No results found.</CommandEmpty>
+                        )}
+
+                        {locations && locations.length > 0 && (
+                          <CommandGroup heading="Locations">
+                            {showSearchResults &&
+                              locations.map((location: Location) => (
+                                <CommandItem
+                                  key={location.id}
+                                  value={`${location.name}-${location.adminDivision1.name}`}
+                                  onSelect={() => {
+                                    const locationString = `${location.name}, ${location.adminDivision1.name}, USA`;
+                                    form.setValue(
+                                      "locationName",
+                                      locationString
+                                    );
+                                    setInput(locationString);
+                                  }}
+                                >
+                                  <div>
+                                    <span>
+                                      {location.name},{" "}
+                                      {location.adminDivision1.name}, USA
+                                    </span>
+                                    <br />
+                                    <small>
+                                      Lat: {location.coordinates.latitude}, Lng:{" "}
+                                      {location.coordinates.longitude}
+                                    </small>
+                                  </div>
+                                </CommandItem>
+                              ))}
+                          </CommandGroup>
+                        )}
+                      </CommandList>
+                    )}
+                  </Command>
                 </FormControl>
                 <FormDescription>
-                  This is the search radius used for your search. It might be
-                  adjusted by Yelp based on business density.
+                  This is the location that will be used for the center of your
+                  search.
                 </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="sort_on"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Sort On</FormLabel>
-                <Select
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    if (!validSortOptions.has(value)) {
-                      throw new Error(`Invalid sort option: ${value}`);
-                    }
-                  }}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select a sorting option" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="popularity">Popularity</SelectItem>
-                    <SelectItem value="time_start">Start Date</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  Suggest to our search algorithm that the results be sorted by
-                  the selected option.
-                </FormDescription>
-                <FormMessage />
+                <FormMessage>{fieldState.error?.message}</FormMessage>
               </FormItem>
             )}
           />
@@ -299,74 +310,63 @@ export function EventsSearchForm() {
           />
           <FormField
             control={form.control}
-            name="locationName"
-            render={({ field, fieldState }) => (
+            name="radius"
+            render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Location</FormLabel>
+                <FormLabel>
+                  Search Radius: {radiusValue.toFixed(2)} miles
+                </FormLabel>
                 <FormControl>
-                  <Command
-                    ref={commandRef}
-                    className="relative rounded-lg border max-w-lg overflow-visible"
-                  >
-                    <CommandInput
-                      onValueChange={(text) => {
-                        setInput(text);
-                        debounceRequest();
-                        form.setValue("locationName", text);
-                        setInput(text);
-                        setShowSearchResults(true);
-                      }}
-                      value={field.value}
-                      className="custom-input outline-none border-none focus:border-none focus:outline-none ring-0"
-                      placeholder="Search locations..."
-                    />
-
-                    {field.value.length > 0 && (
-                      <CommandList className="bg-white shadow rounded-b-md">
-                        {isFetched && locations?.length === 0 && (
-                          <CommandEmpty>No results found.</CommandEmpty>
-                        )}
-
-                        {locations && locations.length > 0 && (
-                          <CommandGroup heading="Locations">
-                            {showSearchResults &&
-                              locations.map((location: Location) => (
-                                <CommandItem
-                                  key={location.id}
-                                  value={`${location.name}-${location.adminDivision1.name}`}
-                                  onSelect={() => {
-                                    const locationString = `${location.name}, ${location.adminDivision1.name}, USA`;
-                                    form.setValue(
-                                      "locationName",
-                                      locationString
-                                    );
-                                    setInput(locationString);
-                                  }}
-                                >
-                                  <div>
-                                    <span>
-                                      {location.name},{" "}
-                                      {location.adminDivision1.name}, USA
-                                    </span>
-                                    <br />
-                                    <small>
-                                      Lat: {location.coordinates.latitude}, Lng:{" "}
-                                      {location.coordinates.longitude}
-                                    </small>
-                                  </div>
-                                </CommandItem>
-                              ))}
-                          </CommandGroup>
-                        )}
-                      </CommandList>
-                    )}
-                  </Command>
+                  <Slider
+                    className="w-full md:w-1/2"
+                    defaultValue={[radiusValue]}
+                    max={24.854848}
+                    min={1}
+                    step={0.01}
+                    onValueChange={(values) => {
+                      field.onChange(values[0]);
+                      setRadiusValue(values[0]);
+                    }}
+                  />
                 </FormControl>
                 <FormDescription>
-                  This is the location that will be used for the center of your
-                  search.
+                  This is the search radius used for your search. It might be
+                  adjusted by Yelp based on business density.
                 </FormDescription>
-                <FormMessage>{fieldState.error?.message}</FormMessage>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="sort_on"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Sort On</FormLabel>
+                <Select
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    if (!validSortOptions.has(value)) {
+                      throw new Error(`Invalid sort option: ${value}`);
+                    }
+                  }}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select a sorting option" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="popularity">Popularity</SelectItem>
+                    <SelectItem value="time_start">Start Date</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  Suggest to our search algorithm that the results be sorted by
+                  the selected option.
+                </FormDescription>
+                <FormMessage />
               </FormItem>
             )}
           />

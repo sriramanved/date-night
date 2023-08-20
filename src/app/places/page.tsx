@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: 'Search for places to go on a date.',
 }
 
-const Page = () => {
+const PlacesSearchPage = () => {
 
   return (
     <PlacesProvider>
@@ -18,4 +18,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default PlacesSearchPage;

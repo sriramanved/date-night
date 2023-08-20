@@ -39,7 +39,7 @@ import {
 } from "@/lib/helpers/constants/places";
 import { Loader2 } from "lucide-react";
 import { Slider } from "@/components/ui/Slider";
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
@@ -424,7 +424,6 @@ export function LocationForm() {
             )}
           />
         </>
-
         <Button type="submit" disabled={isFetchingLocation}>
           {isFetchingLocation ? (
             <>

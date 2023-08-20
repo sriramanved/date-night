@@ -57,8 +57,8 @@ export default function PlacesSearchResults() {
         params.open_now = searchParameters.open_now;
       }
 
-      const { data } = await axios.get("/api/yelp", {
-        params: params, // use the new parameters object
+      const { data } = await axios.get("/api/yelp/places/autocompletion", {
+        params: params, 
       });
 
       console.log(data);

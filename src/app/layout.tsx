@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/Toaster";
 
 import "@/styles/globals.css";
 import { Metadata } from "next";
+import Chat from "@/components/chatbot/Chat";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ export default function RootLayout({
           <div className="container max-w-7xl mx-auto h-full pt-12">
             {children}
           </div>
+          <Chat />
         </Providers>
         <Toaster />
       </body>

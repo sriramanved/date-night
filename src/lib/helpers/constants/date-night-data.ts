@@ -1,6 +1,6 @@
 export const datenightData = `
 <url>
-<loc>http://localhost:3000</loc>
+<loc>https://date-night-three.vercel.app/</loc>
 <content>
     <feature>
         <name></name>
@@ -9,42 +9,57 @@ export const datenightData = `
 </content>
 <desc>A place to find date night ideas. This is where you can view your personalized post feed based on the communities you are subscribed to if you are signed in, and a general post feed if you are not signed in.</desc>
 </url>
+
 <url>
-<loc>http://localhost:3000/sign-in</loc>
+<loc>https://date-night-three.vercel.app/sign-in</loc>
 <desc>A sign in page</desc>
 </url>
+
 <url>
-<loc>https://books.toscrape.com/catalogue/category/books/travel_2/index.html</loc>
+<loc>https://date-night-three.vercel.app/r/[slug]</loc>
+<desc>A specific community's page</desc>
 <content>
-    <book>
-    <url>https://books.toscrape.com/catalogue/its-only-the-himalayas_981/index.html</url>
-    <desc>A book about travelling the himalayas</desc>
-    <price>45.17</price>
-    <availability>in stock</availability>
-    </book>
-    <book>
-    <url>https://books.toscrape.com/catalogue/full-moon-over-noahs-ark-an-odyssey-to-mount-ararat-and-beyond_811/index.html</url>
-    <desc>A book by Rick Ansonson about his journey to Mount Ararat</desc>
-    <price>49.43</price>
-    <availability>in stock</availability>
-    </book>
+    <posts>
+    <desc>Several posts sorted by most recently posted to subcommunity r/[slug]</desc>
+    </posts>
 </content>
 </url>
+
 <url>
-<loc>https://books.toscrape.com/catalogue/category/books/mystery_3/index.html</loc>
+<loc>https://date-night-three.vercel.app/r/[slug]/submit</loc>
+<desc>A page to create a post for a specific community</desc>
+</url>
+
+<url>
+<loc>https://date-night-three.vercel.app/r/[slug]/[post_id]</loc>
+<desc>A specific post's page</desc>
 <content>
-    <book>
-    <url>https://books.toscrape.com/catalogue/sharp-objects_997/index.html</url>
-    <desc>A book about by Gillian Flynn about Camille Preaker's troubled past</desc>
-    <price>47.87</price>
-    <availability>in stock</availability>
-    </book>
-    <book>
-    <url>https://books.toscrape.com/catalogue/the-past-never-ends_942/index.html</url>
-    <desc>A book by Jackson Burnett about the attourney Chester Morgan. His friend died in an unexplained accidental death.</desc>
-    <price>56.50</price>
-    <availability>in stock</availability>
-    </book>
+    <comments>
+    <desc>Several comments sorted by most recently posted to post [post_id]</desc>
+    </comments>
+
+    <comment-form>
+    <desc>A form to create a comment for post [post_id]</desc>
+    </comment-form>
+
+    <post>
+    <desc>Post [post_id]</desc>
+    </post>
 </content>
 </url>
+
+<url>
+<loc>https://date-night-three.vercel.app/places</loc>
+<desc>A page to search for places to go on a date</desc>
+</url>
+
+<url>
+<loc>https://date-night-three.vercel.app/places/events</loc>
+<desc>A page to search for events to go to on a date</desc>
+</url>
+
+
+
+
+
 `;

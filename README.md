@@ -1,6 +1,6 @@
 # Date Night - a place to find date ideas near you!
 
-Quick note: WIP. Haven't fully deployed the finishing touches yet. Stay tuned! :P
+I just deployed a first edition! Planning to work on this a bit throughout the semester.
 
 ## Built with the Next.js App Router, TypeScript & Prisma
 

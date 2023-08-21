@@ -106,8 +106,8 @@ const SearchBar = () => {
             <CommandGroup heading="Posts">
               {posts.map((post) => (
                 <CommandItem
-                  onSelect={(e) => {
-                    router.push(`/r/${post.subreddit.name}/post/${e}`);
+                  onSelect={() => {
+                    router.push(`/r/${post.subreddit.name}/post/${post.id}`);
                     router.refresh();
                   }}
                   key={post.id}

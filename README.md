@@ -5,12 +5,13 @@ I just deployed a first edition! Planning to work on this a bit throughout the s
 ## Built with the Next.js App Router, TypeScript & Prisma
 
 - OpenAI's API — real-time streaming responses from GPT-3.5
-- Zod — schema validation
+- Zod — enforcing schema validation
 - Shadcn-ui, Tailwind — built-in components and styling
 - Neon — our Serverless PostgreSQL database
 - UploadThing — image/ video server uploads
 - React-Query — optimized data fetching
 - Editor.js — sleek post editor
+- 
 
 ## Features
 
@@ -23,7 +24,7 @@ I just deployed a first edition! Planning to work on this a bit throughout the s
 - A beautiful and highly functional post editor
 - Image uploads & link previews
 - Full comment functionality with nested replies
-- Blog section with trending events from Eventbrite
-- Hot spots from Yelp
+- Blog section with trending events from Yelp
+- Hot spots and events 
 - Love Expert AI Chatbot
 - ... and much more
